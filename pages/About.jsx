@@ -6,6 +6,7 @@ const { useSelector } = ReactRedux;
 import { utilService } from '../services/util.service.js'
 import { AboutTeam } from '../cmps/AboutTeam.jsx'
 import { AboutVision } from '../cmps/AboutVision.jsx'
+import { userService } from '../services/user.service.js'
 
 export function About() {
     const titleRef = useRef()
@@ -14,7 +15,7 @@ export function About() {
     const [colors, setColors] = useState({})
 
     useEffect(() => {
-            setColors(loggedInUser ? { bgColor: loggedInUser.bgColor, color: loggedInUser.color } : utilService.getDefaultPref())
+            setColors(loggedInUser ? { bgColor: loggedInUser.bgColor, color: loggedInUser.color } : userService.getDefaultPref())
     }, [loggedInUser])
 
     function onViewMore() {
