@@ -1,0 +1,12 @@
+.todo-filter {
+    background-color: var(--clr2bg);
+    padding: 1em;
+    margin: 1em 0;
+}
+
+.todo-filter form {
+    display: flex;
+    flex-direction: column;
+    width: max-content;
+}
+
