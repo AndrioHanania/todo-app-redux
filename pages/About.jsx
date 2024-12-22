@@ -15,7 +15,7 @@ export function About() {
 
     useEffect(() => {
             setColors(loggedInUser ? { bgColor: loggedInUser.bgColor, color: loggedInUser.color } : utilService.getDefaultPref())
-    }, [loggedInUser.bgColor, loggedInUser.color])
+    }, [loggedInUser])
 
     function onViewMore() {
         alert('curiosity killed the cat')
