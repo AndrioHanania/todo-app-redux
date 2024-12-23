@@ -78,7 +78,12 @@ function getRandomBoolean() {
 
 function getTruthyValues(obj) {
     return Object.keys(obj).reduce((acc, key) => {
-        if (obj[key] && key !== 'userId') acc[key] = obj[key]
+        if (typeof obj[key] === 'object' && obj[key] !== null) {
+            const nestedTruthy = getTruthyValues(obj[key])
+            Object.assign(acc, nestedTruthy)
+        } else if (obj[key] && key !== 'userId') {
+            acc[key] = obj[key]
+        }
         return acc
     }, {})
 }

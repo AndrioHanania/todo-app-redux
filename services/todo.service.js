@@ -46,8 +46,20 @@ function query(filterBy = {}) {
                     break
             }
 
-            return todos
-        })
+            if(filterBy.pagination) {
+                const total = todos.length;
+                const skip = (filterBy.pagination.page - 1) * filterBy.pagination.pageSize;
+                todos = todos.slice(skip, skip + filterBy.pagination.pageSize)
+
+                return { 
+                    todos,
+                    total,
+                    pages: Math.ceil(total / filterBy.pagination.pageSize)
+                };
+            }
+            else
+                return todos;
+        });
 }
 
 function get(todoId) {
@@ -101,14 +113,14 @@ function getEmptyTodo(txt = '', importance = 5) {
 }
 
 function getDefaultFilter(userId) {
-    return { txt: '', importance: 0, status: 'all', userId }
+    return { txt: '', importance: 0, status: 'all', userId, pagination: { page: 1, pageSize: 5 } }
 }
 
 function getFilterFromSearchParams(searchParams) {
     const defaultFilter = getDefaultFilter()
     const filterBy = {}
     for (const field in defaultFilter) {
-        filterBy[field] = searchParams.get(field) || ''
+        filterBy[field] = searchParams.get(field) || defaultFilter[field]; 
     }
     return filterBy
 }

@@ -36,7 +36,6 @@ export function userReducer(state = initialState, cmd = {}) {
                 loggedInUser: { 
                     _id: state.loggedInUser._id,
                     ...cmd.details,
-
                 },
             };
         case SET_IS_LOADING:

@@ -8,15 +8,15 @@ import { SET_FILTER_BY } from "../store/reducers/todo.reducer.js";
 import { useEffectUpdate } from "../hooks/useEffectUpdate.jsx"
 import { utilService } from "../services/util.service.js"
 import { Loader } from "../cmps/Loader.jsx"
+import { Pagination } from "../cmps/Pagination.jsx"
 
 const { useEffect } = React
 const { Link, useSearchParams } = ReactRouterDOM
 const { useSelector, useDispatch } = ReactRedux;
 
 export function TodoIndex() {
-    const { todos, isLoading } = useSelector(storeState => storeState.todoModule);
+    const { todos, total, pages, filterBy, isLoading } = useSelector(storeState => storeState.todoModule);
     const [searchParams, setSearchParams] = useSearchParams();
-    const filterBy = useSelector(storeState => storeState.todoModule.filterBy);
     const loggedInUser = useSelector(storeState => storeState.userModule.loggedInUser);
     const dispatch = useDispatch();
 
@@ -66,7 +66,34 @@ export function TodoIndex() {
         }
     }
 
+    function onChangePage(page) {
+        dispatch({ 
+            type: SET_FILTER_BY, 
+            filterBy: { 
+                ...filterBy, 
+                pagination: { 
+                    ...filterBy.pagination, 
+                    page, 
+                }, 
+            }, 
+        });
+    }
+
+    function onChangePageSize(pageSize) {
+        dispatch({ 
+            type: SET_FILTER_BY, 
+            filterBy: { 
+                ...filterBy, 
+                pagination: { 
+                    ...filterBy.pagination, 
+                    pageSize, 
+                }, 
+            }, 
+        });
+    }
+
     if (!todos || !filterBy) return <div>Loading...</div>
+
     return (
         <section className="todo-index">
             <TodoFilter filterBy={filterBy}/>
@@ -77,12 +104,27 @@ export function TodoIndex() {
             {loggedInUser && (
                 <section>
                     <h2>Todos List</h2>
-                {!isLoading && <TodoList todos={todos} onRemoveTodo={onRemoveTodo} onToggleTodo={onToggleTodo} />}
+                {!isLoading && (
+                    <div>
+                        <TodoList
+                            todos={todos}
+                            onRemoveTodo={onRemoveTodo}
+                            onToggleTodo={onToggleTodo} 
+                        />
+                        
+                        <Pagination 
+                            pagination={filterBy.pagination}
+                            totalPages={pages}
+                            onChangePageSize={onChangePageSize}
+                            onChangePage={onChangePage}
+                        />
+                    </div>
+                    )}
                 <Loader isLoading={isLoading} text="Loading todos..."/>
                 </section>
             )}
 
-            {loggedInUser && (
+            {/* {loggedInUser && (
                 <section>
                     <hr />
                     <h2>Todos Table</h2>
@@ -91,7 +133,7 @@ export function TodoIndex() {
                         <Loader isLoading={isLoading} text="Loading todos..."/>
                     </div>
                 </section>
-            )}
+            )} */}
             
             {!loggedInUser && (
                 <section>

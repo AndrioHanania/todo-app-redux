@@ -8,6 +8,10 @@
 @import "base/layout.css";
 @import "base/forms.css";
 
+/* Pages */
+@import "pages/TodoIndex.css";
+
+
 /* Components */
 @import "cmps/AppHeader.css";
 @import "cmps/UserMsg.css";
@@ -23,3 +27,4 @@
 @import "cmps/TodoPreview.css";
 @import "cmps/TodoDetails.css";
 @import "cmps/TodoEdit.css";
+@import "cmps/Pagination.css";

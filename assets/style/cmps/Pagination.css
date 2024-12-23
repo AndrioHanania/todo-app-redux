@@ -1,0 +1,71 @@
+.pagination-container {
+    display: grid;
+    grid-template-columns: 1fr AUTO;
+    align-items: center;
+    margin: 10px auto;
+    padding: 5px;
+
+    .pagination-panel {
+        justify-self: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        align-items: center;
+        gap: 3px;
+
+        .page-numbers {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            gap: 3px;
+            margin: 0;
+
+            .page-number {
+                button {
+                    all: unset;
+                    font-weight: bold;
+                    color: black;
+                    cursor: pointer;
+                }
+
+                button:hover, button.active {
+                    color: aqua;
+                }
+
+                .ellipsis {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: #999;
+                    pointer-events: none;
+                } 
+            }
+        }
+    }
+
+    .pagination-controller {
+        justify-self: end;
+        justify-items: center;
+
+        .page-sizes {
+            list-style-type: none;
+            padding: 0;
+            display: flex;
+            gap: 3px;
+            margin: 0;
+
+            .page-size {
+                button {
+                    all: unset;
+                    font-weight: bold;
+                    color: black;
+                    cursor: pointer;
+                }
+
+                button:hover, button.active {
+                    color: aqua;
+                }
+
+            }
+        }
+    }
+}

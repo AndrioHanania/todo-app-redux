@@ -10,11 +10,11 @@ export async function loadTodos() {
     const filterBy = store.getState().todoModule.filterBy;
     const loggedInUser = store.getState().userModule.loggedInUser;
     filterBy.userId = loggedInUser ? loggedInUser._id : null;
-    const todos = await todoService.query(filterBy);
+    const todosData = await todoService.query(filterBy);
 
     try{
         if(loggedInUser)
-            store.dispatch({ type: SET_TODOS, todos: todos });
+            store.dispatch({ type: SET_TODOS, todosData });
     }
     catch(error){
         console.log('todo action -> Cannot load todos', error);

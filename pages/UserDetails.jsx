@@ -6,10 +6,8 @@ const { useState } = React
 const { useSelector } = ReactRedux;
 
 export function UserDetails() {
-    const { loggedInUser } = useSelector(storeState => storeState.userModule);
+    const loggedInUser = useSelector(storeState => storeState.userModule.loggedInUser);
     const [details, setDetails] = useState(loggedInUser ? { ...loggedInUser } : userService.getDefaultPref());
-
-    console.log('UserDetails -> loggedInUser: ', loggedInUser);
 
     useEffectUpdate(() => {
         updateUser(loggedInUser._id, details);

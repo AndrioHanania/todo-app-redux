@@ -9,6 +9,8 @@ export const SET_IS_LOADING = 'SET_IS_LOADING';
 
 const initialState = {
     todos: [],
+    total: 0,
+    pages: 0,
     filterBy: todoService.getDefaultFilter(),
     isLoading: false,
 };
@@ -18,7 +20,9 @@ export function todoReducer(state = initialState, cmd = {}) {
         case SET_TODOS:
             return { 
                 ...state,
-                todos: cmd.todos,
+                todos: cmd.todosData.todos,
+                total: cmd.todosData.total,//
+                pages: cmd.todosData.pages,//
             };
         case REMOVE_TODO:
             return { 
@@ -38,7 +42,13 @@ export function todoReducer(state = initialState, cmd = {}) {
         case SET_FILTER_BY:
             return { 
                 ...state,
-                filterBy: { ...state.filterBy, ...cmd.filterBy },
+                filterBy: { 
+                    ...state.filterBy, 
+                    ...cmd.filterBy,
+                    pagination: { 
+                        ...cmd.filterBy.pagination
+                    },
+                },
             };
         case SET_IS_LOADING:
             return { 

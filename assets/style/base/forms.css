@@ -7,6 +7,12 @@ button, .btn {
     border-radius: 4px;
 }
 
+button.disabled, .btn.disabled {
+    cursor: not-allowed;
+    background-color: gray;
+    transition: none;
+}
+
 button:hover, .btn:hover {
     background-color: var(--clr2);
     color: white;
