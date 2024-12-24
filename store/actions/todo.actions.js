@@ -31,6 +31,7 @@ export async function removeTodo(todoId) {
     const todo = await todoService.getById(todoId);
     await todoService.remove(todoId);
     const user = await userService.getById(todo.userId);
+    user.activities.push({text: "Remove todo", at: Date.now()})
     const savedUser = await todoService.updateProgressToUser(user);
 
     try{
@@ -52,6 +53,7 @@ export async function saveTodo(todo) {
     const type = todo._id ? UPDATE_TODO : ADD_TODO;
     const savedTodo = await todoService.save(todo);
     const user = await userService.getById(savedTodo.userId);
+    user.activities.push({text:  `${todo._id ? 'Update' : 'Create'} todo`, at: Date.now()})
     let savedUser = await todoService.updateProgressToUser(user);
     if(todo.isDone)
         savedUser = await todoService.updateBalanceToUser(user);

@@ -1,13 +1,32 @@
 import { updateUser } from "../store/actions/user.actions.js";
 import { useEffectUpdate } from "../hooks/useEffectUpdate.jsx";
 import { userService } from "../services/user.service.js";
+import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 
-const { useState } = React
+const { useState, useEffect } = React
 const { useSelector } = ReactRedux;
 
 export function UserDetails() {
     const loggedInUser = useSelector(storeState => storeState.userModule.loggedInUser);
     const [details, setDetails] = useState(loggedInUser ? { ...loggedInUser } : userService.getDefaultPref());
+    const [activities, setActivities] = useState([]);
+
+    async function loadActivities() {
+        try{
+            const user = await userService.getById(loggedInUser._id);
+            console.log('user.activities: ', user.activities);
+            if(user.activities)
+                setActivities(user.activities);
+        }catch(error){
+            showErrorMsg('Cannot load activities');
+            console.log('Cannot load activities err:', error);
+        }
+    }
+
+    useEffect(() => {
+        if(loggedInUser)
+            loadActivities();
+    }, [loggedInUser])
 
     useEffectUpdate(() => {
         updateUser(loggedInUser._id, details);
@@ -33,6 +52,32 @@ export function UserDetails() {
 
         setDetails(prevDetails => ({ ...prevDetails, [field]: value }))
     }
+
+    function timeAgo(timestamp) {
+        const now = new Date();
+        const activityDate = new Date(timestamp);
+        const diffInSeconds = Math.floor((now - activityDate) / 1000);
+    
+        const units = [
+            { label: "year", seconds: 31536000 },
+            { label: "month", seconds: 2592000 },
+            { label: "week", seconds: 604800 },
+            { label: "day", seconds: 86400 },
+            { label: "hour", seconds: 3600 },
+            { label: "minute", seconds: 60 },
+            { label: "second", seconds: 1 },
+        ];
+    
+        for (const unit of units) {
+            const count = Math.floor(diffInSeconds / unit.seconds);
+            if (count > 0) {
+                return `${count} ${unit.label}${count > 1 ? "s" : ""} ago`;
+            }
+        }
+    
+        return "just now";
+    }
+    
 
     return (
         <section className="user-index" style={{ color: details.color, backgroundColor: details.bgColor }}>
@@ -73,6 +118,15 @@ export function UserDetails() {
                         />
                     </div>
                 </form>
+            )}
+            {loggedInUser && (
+                <ul className="activities">
+                    {activities.map((activity, idx) => (
+                        <li className="activity" key={`activity-${idx}`}>
+                            {timeAgo(activity.at)} | {activity.text}
+                        </li>
+                    ))}
+                </ul>
             )}
         </section>
     );

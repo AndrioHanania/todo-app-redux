@@ -73,12 +73,14 @@ function getEmptyCredentials() {
 function updateProgress(user, progress) {
     user.progress = progress
     user.updatedAt = Date.now()
+    user.activities.push({text: "Update user progress", at: Date.now()})
     return storageService.put(STORAGE_KEY, user)
 }
 
 function updateBalance(user) {
     user.balance = user.balance + 10;
     user.updatedAt = Date.now()
+    user.activities.push({text: "Update user balance", at: Date.now()})
     return storageService.put(STORAGE_KEY, user)
 }
 
@@ -86,6 +88,7 @@ function updateUser(user, details) {
     user.pref = { bgColor: details.bgColor, color: details.color }
     user.fullname = details.fullname
     user.updatedAt = Date.now()
+    user.activities.push({text: "Update user details", at: Date.now()})
     sessionStorage.setItem(STORAGE_KEY_LOGGEDIN, JSON.stringify({ _id: user._id, ...details }))
     return storageService.put(STORAGE_KEY, user)
 }
@@ -102,6 +105,7 @@ function _createUsers(){
                 fullname: `user${i} fullname`,
                 progress: '0%',
                 balance: '0',
+                activities: [{text: "Create a demo user", at: Date.now()}],
                 pref: getDefaultPref(),
                 updatedAt: Date.now(),
                 updatedAt:  Date.now(),

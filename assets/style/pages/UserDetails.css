@@ -1,0 +1,17 @@
+.activities {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 25px auto;
+    width: 50vw;
+    text-align: center;
+    
+    .activity {
+        border-radius: 5px;
+        border: 2px solid blue;
+        padding: 5px;
+        font-weight: bold;
+    }
+}

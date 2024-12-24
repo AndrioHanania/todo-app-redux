@@ -1,6 +1,5 @@
 import { TodoFilter } from "../cmps/TodoFilter.jsx"
 import { TodoList } from "../cmps/TodoList.jsx"
-import { DataTable } from "../cmps/data-table/DataTable.jsx"
 import { todoService } from "../services/todo.service.js"
 import { showErrorMsg, showSuccessMsg } from "../services/event-bus.service.js"
 import { loadTodos, removeTodo, saveTodo } from "../store/actions/todo.actions.js";
@@ -15,10 +14,13 @@ const { Link, useSearchParams } = ReactRouterDOM
 const { useSelector, useDispatch } = ReactRedux;
 
 export function TodoIndex() {
-    const { todos, total, pages, filterBy, isLoading } = useSelector(storeState => storeState.todoModule);
+    const { todos, pages, filterBy, isLoading } = useSelector(storeState => storeState.todoModule);
     const [searchParams, setSearchParams] = useSearchParams();
     const loggedInUser = useSelector(storeState => storeState.userModule.loggedInUser);
     const dispatch = useDispatch();
+
+
+    console.log('loggedInUser:', loggedInUser);
 
     useEffect(() => {
         const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
@@ -97,51 +99,42 @@ export function TodoIndex() {
     return (
         <section className="todo-index">
             <TodoFilter filterBy={filterBy}/>
+
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>
             </div>
-    
-            {loggedInUser && (
-                <section>
-                    <h2>Todos List</h2>
-                {!isLoading && (
-                    <div>
-                        <TodoList
-                            todos={todos}
-                            onRemoveTodo={onRemoveTodo}
-                            onToggleTodo={onToggleTodo} 
-                        />
-                        
-                        <Pagination 
-                            pagination={filterBy.pagination}
-                            totalPages={pages}
-                            onChangePageSize={onChangePageSize}
-                            onChangePage={onChangePage}
-                        />
-                    </div>
-                    )}
-                <Loader isLoading={isLoading} text="Loading todos..."/>
-                </section>
-            )}
 
-            {/* {loggedInUser && (
-                <section>
-                    <hr />
-                    <h2>Todos Table</h2>
-                    <div style={{ width: '60%', margin: 'auto' }}>
-                        {!isLoading && <DataTable todos={todos} onRemoveTodo={onRemoveTodo} />}
+            {
+                loggedInUser ? (
+                    <section>
+                        <h2>Todos List</h2>
+
+                        {!isLoading && (
+                            <div>
+                                <TodoList
+                                    todos={todos}
+                                    onRemoveTodo={onRemoveTodo}
+                                    onToggleTodo={onToggleTodo} 
+                                />
+                                
+                                <Pagination 
+                                    pagination={filterBy.pagination}
+                                    totalPages={pages}
+                                    onChangePageSize={onChangePageSize}
+                                    onChangePage={onChangePage}
+                                />
+                            </div>
+                        )}
                         <Loader isLoading={isLoading} text="Loading todos..."/>
-                    </div>
-                </section>
-            )} */}
-            
-            {!loggedInUser && (
-                <section>
-                    <h3>
-                        Can't see todos if not logged in
-                    </h3>
-                </section>
-            )}
+                    </section>
+                ) : (
+                    <section>
+                        <h3>
+                            Can't see todos if not logged in
+                        </h3>
+                    </section>
+                )
+            }
         </section>
     )
 }

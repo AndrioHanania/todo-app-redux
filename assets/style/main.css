@@ -10,7 +10,7 @@
 
 /* Pages */
 @import "pages/TodoIndex.css";
-
+@import "pages/UserDetails.css";
 
 /* Components */
 @import "cmps/AppHeader.css";

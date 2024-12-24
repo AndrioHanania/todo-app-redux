@@ -18,8 +18,8 @@ export function AppHeader() {
     async function updateInfo() {
         if (loggedInUser) {
             const user = await userService.getById(loggedInUser._id);
-            dispatch({ type: UPDATE_PROGRESS, progress: user.progress });
-            dispatch({ type: UPDATE_BALANCE, balance: user.balance });
+            dispatch({ type: UPDATE_PROGRESS, progress: parseFloat(user.progress) });
+            dispatch({ type: UPDATE_BALANCE, balance: parseInt(user.balance) });
         }
         else {
             dispatch({ type: UPDATE_PROGRESS, progress: 0 });
