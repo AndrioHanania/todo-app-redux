@@ -1,4 +1,4 @@
-const { useRef, useState, useEffect } = React
+const { useRef, useState } = React
 const { Outlet, NavLink } = ReactRouterDOM
 // const { PropTypes } = PropTypes
 const { useSelector } = ReactRedux;
@@ -11,20 +11,13 @@ import { userService } from '../services/user.service.js'
 export function About() {
     const titleRef = useRef()
     const count = 1000001
-    const defaultPref = userService.getDefaultPref();
-    const bgColor = useSelector(storeState => 
-        storeState.userModule.loggedInUser ? storeState.userModule.loggedInUser.bgColor : defaultPref.bgColor);
-    const color = useSelector(storeState => 
-        storeState.userModule.loggedInUser ? storeState.userModule.loggedInUser.color : defaultPref.color);
 
     function onViewMore() {
         alert('curiosity killed the cat')
     }
 
-    const colorStyle = { backgroundColor: bgColor, color: color};
-
     return (
-        <section className="about" style={{ ...colorStyle }}>
+        <section className="about">
             <h1 ref={titleRef}>About todos and us...</h1>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Optio dolore sapiente, iste animi corporis nisi atque tempora assumenda dolores. Nobis nam dolorem rerum illo facilis nemo sit voluptatibus laboriosam necessitatibus!</p>
             <button onClick={() => {

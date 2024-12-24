@@ -9,6 +9,7 @@ import { AboutVision } from "./cmps/AboutVision.jsx"
 import { Dashboard } from "./pages/Dashboard.jsx"
 import { store } from './store/store.js'
 import { UserDetails } from "./pages/UserDetails.jsx"
+import { CanvasColor } from "./cmps/CanvasColor.jsx"
 
 const Router = ReactRouterDOM.HashRouter
 const { Routes, Route } = ReactRouterDOM
@@ -18,7 +19,7 @@ export function RootCmp() {
     return (
         <Provider store={store}>
             <Router>
-                <section className="app main-layout">
+                <CanvasColor className="app main-layout">
                     <AppHeader />
                     <main>
                         <Routes>
@@ -35,7 +36,7 @@ export function RootCmp() {
                             <Route path="/user" element={<UserDetails />} />
                         </Routes>
                     </main>
-                </section>
+                </CanvasColor>
             </Router>
         </Provider>
     );
