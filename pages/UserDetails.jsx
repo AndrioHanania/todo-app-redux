@@ -14,7 +14,6 @@ export function UserDetails() {
     async function loadActivities() {
         try{
             const user = await userService.getById(loggedInUser._id);
-            console.log('user.activities: ', user.activities);
             if(user.activities)
                 setActivities(user.activities);
         }catch(error){

@@ -1,22 +1,17 @@
 import { utilService } from "../services/util.service.js"
 import { useEffectUpdate } from "../hooks/useEffectUpdate.jsx"
-import { SET_FILTER_BY } from "../store/reducers/todo.reducer.js";
 
 const { useState, useRef } = React
 const { useDispatch } = ReactRedux;
 
-export function TodoFilter({ filterBy }) {
+export function TodoFilter({ filterBy, onSetFilter }) {
     const [filterByToEdit, setFilterByToEdit] = useState({ ...filterBy });
     const onFilterDebounce = useRef(utilService.debounce(onSetFilter)).current
     const dispatch = useDispatch();
 
     useEffectUpdate(() => {
-        setFilterByToEdit(filterBy)
-    }, [filterBy]);
-
-    function onSetFilter(i_filterBy) {
-        dispatch({ type: SET_FILTER_BY, filterBy: i_filterBy });
-    }
+        onFilterDebounce(filterByToEdit)
+    }, [filterByToEdit]);
     
     function handleChange({ target }) {
         const field = target.name
@@ -36,7 +31,6 @@ export function TodoFilter({ filterBy }) {
         }
 
         setFilterByToEdit({ ...filterByToEdit, [field]: value })
-        onFilterDebounce({ ...filterByToEdit, [field]: value })
     }
 
     const { txt, importance, status } = filterByToEdit;

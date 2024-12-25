@@ -14,22 +14,22 @@ const { Link, useSearchParams } = ReactRouterDOM
 const { useSelector, useDispatch } = ReactRedux;
 
 export function TodoIndex() {
-    const { todos, pages, filterBy, isLoading } = useSelector(storeState => storeState.todoModule);
+    const todos = useSelector(storeState => storeState.todoModule.todos);
+    const pages = useSelector(storeState => storeState.todoModule.pages);
+    const filterBy = useSelector(storeState => storeState.todoModule.filterBy);
+    const isLoading = useSelector(storeState => storeState.todoModule.isLoading);
     const [searchParams, setSearchParams] = useSearchParams();
     const loggedInUser = useSelector(storeState => storeState.userModule.loggedInUser);
     const dispatch = useDispatch();
 
-
-    console.log('loggedInUser:', loggedInUser);
-
     useEffect(() => {
         const defaultFilter = todoService.getFilterFromSearchParams(searchParams)
-        dispatch({ type: SET_FILTER_BY, filterBy: defaultFilter });
+        onSetFilter(defaultFilter);
     }, []);
 
     useEffectUpdate(() => {
         setSearchParams(utilService.getTruthyValues(filterBy));
-    }, [filterBy, loggedInUser]);
+    }, [filterBy]);
 
     useEffect(() => {
         try{
@@ -39,7 +39,11 @@ export function TodoIndex() {
             console.eror('err:', err);
             showErrorMsg('Cannot load todos');
         }
-    }, [searchParams]);
+    }, [searchParams, loggedInUser]);
+
+    function onSetFilter(i_filterBy) {
+        dispatch({ type: SET_FILTER_BY, filterBy: i_filterBy });
+    }
 
     async function onRemoveTodo(todoId) {
         if (!confirm(`Are you sure you want to delete the todo with is of "${todoId}"?`)) 
@@ -98,7 +102,7 @@ export function TodoIndex() {
 
     return (
         <section className="todo-index">
-            <TodoFilter filterBy={filterBy}/>
+            <TodoFilter filterBy={filterBy} onSetFilter={onSetFilter}/>
 
             <div>
                 <Link to="/todo/edit" className="btn" >Add Todo</Link>

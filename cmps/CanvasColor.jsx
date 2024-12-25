@@ -11,7 +11,7 @@ export const CanvasColor = ({ children }) => {
         const colorStyle = { backgroundColor: bgColor, color: color};
 
     return (
-        <section style={{ ...colorStyle, height: '100vh' }}>
+        <section style={{ ...colorStyle, height: '100vh', overflow: 'auto' }}>
             { children }
         </section>
     );
